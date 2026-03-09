@@ -1,95 +1,94 @@
-import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import GameCard from "@/components/GameCard";
-
-const games = [
-  {
-    title: "Math Pop!",
-    description: "Pop the bubble with the correct answer. Quick mental math for everyone!",
-    emoji: "🫧",
-    color: "primary" as const,
-    path: "/game/math-pop",
-    ageRange: "All Ages",
-  },
-  {
-    title: "Gravity Lab",
-    description: "Drop objects and see how gravity works. Learn physics by experimenting!",
-    emoji: "🍎",
-    color: "secondary" as const,
-    path: "/game/gravity-lab",
-    ageRange: "Ages 8+",
-  },
-  {
-    title: "Number Rush",
-    description: "Race against the clock! Solve as many math problems as you can.",
-    emoji: "⚡",
-    color: "accent" as const,
-    path: "/game/number-rush",
-    ageRange: "All Ages",
-  },
-  {
-    title: "Balance Scale",
-    description: "Place weights to balance the scale. Learn about equations naturally!",
-    emoji: "⚖️",
-    color: "blue" as const,
-    path: "/game/balance-scale",
-    ageRange: "Ages 6+",
-  },
-];
-
-const container = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.1 },
-  },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 200, damping: 20 } },
-};
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { allGames } from "@/data/games";
 
 const Index = () => {
+  const navigate = useNavigate();
+  const featuredGames = allGames.slice(0, 4);
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="max-w-5xl mx-auto px-6 py-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-5xl sm:text-6xl font-bold font-display text-foreground mb-4">
-            Learn by <span className="text-primary">Playing</span> 🎯
+
+      {/* Hero Section */}
+      <section className="max-w-6xl mx-auto px-6 pt-16 pb-20 text-center">
+        <div className="animate-fade-in">
+          <div className="inline-block mb-6">
+            <span className="text-6xl animate-float inline-block">🎯</span>
+          </div>
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold font-primary text-foreground mb-6 leading-tight tracking-tight">
+            Play. Learn. <span className="text-accent">Think.</span>
           </h1>
-          <p className="text-lg text-muted-foreground font-body max-w-lg mx-auto">
-            Pick a game below and start learning instantly. No signups, no instructions — just fun!
+          <p className="text-lg sm:text-xl text-muted-foreground font-secondary max-w-xl mx-auto mb-10 leading-relaxed">
+            Learn mathematics and physics through fun interactive games. 
+            No setup, no instructions — just click and start playing!
           </p>
-        </motion.div>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Button variant="hero" size="xl" onClick={() => navigate("/games")}>
+              🚀 Play Now
+            </Button>
+            <Button variant="outline" size="lg" onClick={() => navigate("/about")}>
+              Learn More
+            </Button>
+          </div>
+        </div>
 
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="grid grid-cols-1 sm:grid-cols-2 gap-6"
-        >
-          {games.map((game) => (
-            <motion.div key={game.title} variants={item}>
-              <GameCard {...game} />
-            </motion.div>
+        {/* Stats */}
+        <div className="mt-16 flex flex-wrap justify-center gap-8 sm:gap-16 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          {[
+            { value: "4+", label: "Games" },
+            { value: "All Ages", label: "Accessibility" },
+            { value: "Free", label: "Always" },
+          ].map((stat) => (
+            <div key={stat.label} className="text-center">
+              <p className="text-3xl font-bold font-primary text-accent">{stat.value}</p>
+              <p className="text-sm text-muted-foreground font-secondary">{stat.label}</p>
+            </div>
           ))}
-        </motion.div>
+        </div>
+      </section>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="text-center text-sm text-muted-foreground mt-12 font-body"
-        >
-          🧠 Built for curious minds of all ages — from 6 to 96!
-        </motion.p>
-      </main>
+      {/* Featured Games */}
+      <section className="max-w-6xl mx-auto px-6 pb-20">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-bold font-primary text-foreground mb-3">Featured Games ⭐</h2>
+          <p className="text-muted-foreground font-secondary">Pick a game and start learning instantly</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {featuredGames.map((game) => (
+            <GameCard key={game.title} {...game} />
+          ))}
+        </div>
+        <div className="text-center mt-10">
+          <Button variant="outline" size="lg" onClick={() => navigate("/games")}>
+            View All Games →
+          </Button>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="bg-secondary py-16">
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold font-primary text-foreground mb-4">
+            Ready to start learning? 🧠
+          </h2>
+          <p className="text-muted-foreground font-secondary mb-8">
+            Click once. Play instantly. Learn naturally. It's that simple.
+          </p>
+          <Button variant="hero" size="xl" onClick={() => navigate("/games")}>
+            Browse Games
+          </Button>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-8 text-center border-t border-border">
+        <p className="text-sm text-muted-foreground font-secondary">
+          🎮 PlayLearn — Built for curious minds of all ages
+        </p>
+      </footer>
     </div>
   );
 };
