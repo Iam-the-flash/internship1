@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,47 +6,47 @@
 
 @layer base {
   :root {
-    --background: 40 33% 97%;
-    --foreground: 220 25% 18%;
+    --background: 45 100% 97%;
+    --foreground: 0 0% 20%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 25% 18%;
+    --card-foreground: 0 0% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 18%;
+    --popover-foreground: 0 0% 20%;
 
-    --primary: 16 85% 61%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 45 100% 65%;
+    --primary-foreground: 0 0% 20%;
 
-    --secondary: 174 52% 52%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 45 100% 85%;
+    --secondary-foreground: 0 0% 20%;
 
-    --muted: 40 20% 92%;
-    --muted-foreground: 220 10% 50%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 262 60% 62%;
+    --accent: 40 100% 50%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 15% 88%;
-    --input: 40 15% 88%;
-    --ring: 16 85% 61%;
+    --border: 45 30% 88%;
+    --input: 45 30% 88%;
+    --ring: 45 100% 65%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
-    --game-green: 145 60% 48%;
-    --game-blue: 210 75% 55%;
-    --game-yellow: 42 95% 60%;
-    --game-pink: 340 72% 65%;
+    --game-green: 145 55% 52%;
+    --game-blue: 210 70% 58%;
+    --game-purple: 262 55% 62%;
+    --game-coral: 16 80% 62%;
 
-    --shadow-soft: 0 4px 24px -4px hsl(220 25% 18% / 0.08);
-    --shadow-card: 0 8px 32px -8px hsl(220 25% 18% / 0.12);
-    --shadow-game: 0 12px 40px -8px hsl(16 85% 61% / 0.2);
+    --shadow-soft: 0 2px 12px -2px hsl(45 30% 50% / 0.1);
+    --shadow-card: 0 4px 20px -4px hsl(45 30% 50% / 0.12);
+    --shadow-hover: 0 12px 32px -8px hsl(45 100% 50% / 0.2);
 
-    --font-display: 'Fredoka', sans-serif;
-    --font-body: 'Nunito', sans-serif;
+    --font-primary: 'Poppins', sans-serif;
+    --font-secondary: 'Nunito', sans-serif;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -59,25 +59,25 @@
   }
 
   .dark {
-    --background: 220 20% 10%;
-    --foreground: 40 20% 95%;
-    --card: 220 20% 14%;
-    --card-foreground: 40 20% 95%;
-    --popover: 220 20% 14%;
-    --popover-foreground: 40 20% 95%;
-    --primary: 16 85% 61%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 174 52% 52%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 220 15% 18%;
-    --muted-foreground: 220 10% 60%;
-    --accent: 262 60% 62%;
+    --background: 220 15% 8%;
+    --foreground: 45 20% 92%;
+    --card: 220 15% 12%;
+    --card-foreground: 45 20% 92%;
+    --popover: 220 15% 12%;
+    --popover-foreground: 45 20% 92%;
+    --primary: 45 100% 65%;
+    --primary-foreground: 0 0% 12%;
+    --secondary: 45 40% 22%;
+    --secondary-foreground: 45 20% 92%;
+    --muted: 220 12% 16%;
+    --muted-foreground: 220 8% 55%;
+    --accent: 40 100% 50%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 15% 20%;
-    --input: 220 15% 20%;
-    --ring: 16 85% 61%;
+    --border: 220 12% 18%;
+    --input: 220 12% 18%;
+    --ring: 45 100% 65%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -95,19 +95,23 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-body);
+    font-family: var(--font-primary);
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display);
+    font-family: var(--font-primary);
+    font-weight: 700;
+  }
+  p, span, a, li, label, input, textarea, button {
+    font-family: var(--font-secondary);
   }
 }
 
 @layer utilities {
-  .font-display {
-    font-family: var(--font-display);
+  .font-primary {
+    font-family: var(--font-primary);
   }
-  .font-body {
-    font-family: var(--font-body);
+  .font-secondary {
+    font-family: var(--font-secondary);
   }
   .shadow-soft {
     box-shadow: var(--shadow-soft);
@@ -115,7 +119,7 @@
   .shadow-card {
     box-shadow: var(--shadow-card);
   }
-  .shadow-game {
-    box-shadow: var(--shadow-game);
+  .shadow-hover {
+    box-shadow: var(--shadow-hover);
   }
 }

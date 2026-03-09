@@ -9,6 +9,9 @@ import MathPopGame from "./pages/MathPopGame";
 import GravityLabGame from "./pages/GravityLabGame";
 import NumberRushGame from "./pages/NumberRushGame";
 import BalanceScaleGame from "./pages/BalanceScaleGame";
+import GamesLibrary from "./pages/GamesLibrary";
+import About from "./pages/About";
+import Progress from "./pages/Progress";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +23,9 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/games" element={<GamesLibrary />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/progress" element={<Progress />} />
           <Route path="/game/math-pop" element={<MathPopGame />} />
           <Route path="/game/gravity-lab" element={<GravityLabGame />} />
           <Route path="/game/number-rush" element={<NumberRushGame />} />

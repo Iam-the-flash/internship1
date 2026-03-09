@@ -1,50 +1,51 @@
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 interface GameCardProps {
   title: string;
   description: string;
   emoji: string;
-  color: "primary" | "secondary" | "accent" | "green" | "blue" | "pink" | "yellow";
+  difficulty: "Easy" | "Medium" | "Hard";
   path: string;
-  ageRange: string;
+  color: "green" | "blue" | "purple" | "coral" | "primary";
 }
 
-const colorMap = {
-  primary: "bg-primary",
-  secondary: "bg-secondary",
-  accent: "bg-accent",
-  green: "bg-game-green",
-  blue: "bg-game-blue",
-  pink: "bg-game-pink",
-  yellow: "bg-game-yellow",
+const difficultyColors = {
+  Easy: "bg-game-green/15 text-game-green",
+  Medium: "bg-accent/15 text-accent",
+  Hard: "bg-game-coral/15 text-game-coral",
 };
 
-const GameCard = ({ title, description, emoji, color, path, ageRange }: GameCardProps) => {
+const GameCard = ({ title, description, emoji, difficulty, path, color }: GameCardProps) => {
   const navigate = useNavigate();
 
   return (
-    <motion.button
+    <div className="bg-card rounded-2xl shadow-card hover:shadow-hover transition-all duration-300 hover:-translate-y-1 overflow-hidden group cursor-pointer"
       onClick={() => navigate(path)}
-      className={`${colorMap[color]} relative overflow-hidden rounded-2xl p-8 text-left shadow-card transition-shadow hover:shadow-game w-full min-h-[220px] flex flex-col justify-between cursor-pointer group`}
-      whileHover={{ scale: 1.03, y: -4 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
-      <div className="absolute top-4 right-4 text-5xl opacity-30 group-hover:opacity-50 transition-opacity">
-        {emoji}
-      </div>
-      <div>
-        <span className="inline-block rounded-full bg-card/20 px-3 py-1 text-xs font-semibold text-primary-foreground mb-3">
-          {ageRange}
+      {/* Icon area */}
+      <div className="h-36 bg-secondary flex items-center justify-center relative overflow-hidden">
+        <span className="text-6xl group-hover:scale-110 transition-transform duration-300">
+          {emoji}
         </span>
-        <h3 className="text-2xl font-bold text-primary-foreground font-display">{title}</h3>
       </div>
-      <p className="text-sm text-primary-foreground/80 font-body mt-2">{description}</p>
-      <div className="mt-4 inline-flex items-center gap-2 text-primary-foreground font-semibold text-sm">
-        ▶ Play Now
+
+      {/* Content */}
+      <div className="p-5">
+        <div className="flex items-center gap-2 mb-2">
+          <h3 className="text-lg font-bold font-primary text-card-foreground">{title}</h3>
+          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${difficultyColors[difficulty]}`}>
+            {difficulty}
+          </span>
+        </div>
+        <p className="text-sm text-muted-foreground font-secondary leading-relaxed mb-4">
+          {description}
+        </p>
+        <Button variant="play" size="sm" className="w-full">
+          ▶ Play Now
+        </Button>
       </div>
-    </motion.button>
+    </div>
   );
 };
 
