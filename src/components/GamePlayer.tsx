@@ -3,15 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Pause, Play, RotateCcw, LogOut } from "lucide-react";
 import type { GameEngine } from "@/games/types";
+import { saveGameResult } from "@/lib/progress";
 
 interface GamePlayerProps {
+  gameId: string;
   title: string;
   emoji: string;
   instructions: string;
   createEngine: () => GameEngine;
 }
 
-const GamePlayer = ({ title, emoji, instructions, createEngine }: GamePlayerProps) => {
+const GamePlayer = ({ gameId, title, emoji, instructions, createEngine }: GamePlayerProps) => {
   const navigate = useNavigate();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<GameEngine | null>(null);
@@ -21,8 +23,8 @@ const GamePlayer = ({ title, emoji, instructions, createEngine }: GamePlayerProp
   const [showInstructions, setShowInstructions] = useState(true);
   const [gameOver, setGameOver] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
+  const [isNewHighScore, setIsNewHighScore] = useState(false);
 
-  // Auto-hide instructions
   useEffect(() => {
     if (showInstructions) {
       const timer = setTimeout(() => setShowInstructions(false), 4000);
@@ -30,7 +32,6 @@ const GamePlayer = ({ title, emoji, instructions, createEngine }: GamePlayerProp
     }
   }, [showInstructions]);
 
-  // Init engine
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -45,6 +46,9 @@ const GamePlayer = ({ title, emoji, instructions, createEngine }: GamePlayerProp
     engine.onGameOver = (fs) => {
       setFinalScore(fs);
       setGameOver(true);
+      // Auto-save progress
+      const result = saveGameResult(gameId, fs, engine.getLevel());
+      setIsNewHighScore(result.highScore === fs && fs > 0);
     };
 
     engine.init(canvas);
@@ -54,9 +58,8 @@ const GamePlayer = ({ title, emoji, instructions, createEngine }: GamePlayerProp
       engine.destroy();
       engineRef.current = null;
     };
-  }, [createEngine]);
+  }, [createEngine, gameId]);
 
-  // Responsive canvas sizing
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -94,6 +97,7 @@ const GamePlayer = ({ title, emoji, instructions, createEngine }: GamePlayerProp
     setGameOver(false);
     setFinalScore(0);
     setPaused(false);
+    setIsNewHighScore(false);
   }, []);
 
   return (
@@ -121,7 +125,6 @@ const GamePlayer = ({ title, emoji, instructions, createEngine }: GamePlayerProp
 
       {/* Game area */}
       <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 relative">
-        {/* Instruction popup */}
         {showInstructions && (
           <div
             className="absolute top-8 z-30 bg-card border border-border rounded-2xl shadow-hover px-6 py-4 max-w-sm text-center animate-fade-in cursor-pointer"
@@ -133,26 +136,26 @@ const GamePlayer = ({ title, emoji, instructions, createEngine }: GamePlayerProp
           </div>
         )}
 
-        {/* Pause overlay */}
         {paused && !gameOver && (
           <div className="absolute inset-0 z-20 bg-foreground/20 backdrop-blur-sm flex items-center justify-center rounded-2xl">
             <div className="bg-card rounded-2xl shadow-hover p-8 text-center animate-scale-in">
               <p className="text-2xl font-bold font-primary text-foreground mb-4">⏸ Paused</p>
-              <Button variant="hero" size="lg" onClick={togglePause}>
-                Resume
-              </Button>
+              <Button variant="hero" size="lg" onClick={togglePause}>Resume</Button>
             </div>
           </div>
         )}
 
-        {/* Game over overlay */}
         {gameOver && (
           <div className="absolute inset-0 z-20 bg-foreground/20 backdrop-blur-sm flex items-center justify-center rounded-2xl">
             <div className="bg-card rounded-2xl shadow-hover p-8 text-center animate-scale-in max-w-sm">
               <p className="text-4xl mb-3">🎉</p>
               <p className="text-2xl font-bold font-primary text-foreground mb-2">Game Over!</p>
+              {isNewHighScore && (
+                <p className="text-sm font-semibold text-game-green font-secondary mb-1">🏆 New High Score!</p>
+              )}
               <p className="text-3xl font-bold font-primary text-accent mb-1">{finalScore}</p>
-              <p className="text-sm text-muted-foreground font-secondary mb-6">points earned</p>
+              <p className="text-sm text-muted-foreground font-secondary mb-1">points earned</p>
+              <p className="text-xs text-muted-foreground font-secondary mb-6">Level {level} reached • Progress saved ✓</p>
               <div className="flex gap-3 justify-center">
                 <Button variant="hero" size="lg" onClick={handleRestart}>
                   <RotateCcw size={18} /> Play Again
@@ -165,7 +168,6 @@ const GamePlayer = ({ title, emoji, instructions, createEngine }: GamePlayerProp
           </div>
         )}
 
-        {/* Canvas */}
         <div className="w-full max-w-4xl relative">
           <canvas
             ref={canvasRef}
