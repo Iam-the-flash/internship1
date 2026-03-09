@@ -73,13 +73,20 @@ export class MathRunnerEngine implements GameEngine {
         return;
       }
       const rect = this.canvas.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const clickY = e.clientY - rect.top;
-      // Check if clicked on answer buttons
+      // Scale mouse coords from CSS pixels to canvas pixels
+      const scaleX = this.canvas.width / rect.width;
+      const scaleY = this.canvas.height / rect.height;
+      const clickX = (e.clientX - rect.left) * scaleX;
+      const clickY = (e.clientY - rect.top) * scaleY;
+      // Match exact same positions as draw()
+      const w = this.canvas.width;
+      const h = this.canvas.height;
+      const boxW = Math.min(400, w - 40);
+      const boxY = h / 2 - 50;
       const btnW = 80;
       const btnH = 40;
-      const startX = this.canvas.width / 2 - (this.activeQuestion.options.length * (btnW + 10)) / 2;
-      const btnY = this.canvas.height / 2 + 30;
+      const startX = w / 2 - (this.activeQuestion.options.length * (btnW + 10)) / 2;
+      const btnY = boxY + 55;
       this.activeQuestion.options.forEach((_, i) => {
         const bx = startX + i * (btnW + 10);
         if (clickX >= bx && clickX <= bx + btnW && clickY >= btnY && clickY <= btnY + btnH) {
